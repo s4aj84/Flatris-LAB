@@ -5,23 +5,19 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-# Force Node 18 (this one actually works)
 - task: NodeTool@0
   inputs:
-    versionSpec: '18.x'
-  displayName: 'Use Node 18'
+    versionSpec: '14.x'
+  displayName: 'Use Node 14'
 
-# Install dependencies
 - script: |
     npm install
   displayName: 'Install dependencies'
 
-# Build Next.js app
 - script: |
     npm run build
   displayName: 'Build Next.js app'
 
-# Optional: publish build artifacts
 - task: PublishBuildArtifacts@1
   inputs:
     pathToPublish: '.next'
