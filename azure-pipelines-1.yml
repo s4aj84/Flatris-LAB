@@ -18,7 +18,7 @@ steps:
 
 # Install dependencies cleanly
 - script: |
-    npm ci
+    npm install
   displayName: 'Install dependencies'
 
 # Build your Next.js app
