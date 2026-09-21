@@ -4,18 +4,39 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
 trigger:
-- master
+- main
 
 pool:
   vmImage: ubuntu-latest
 
 steps:
-- task: NodeTool@0
+# Use Node 18 (critical for older Next.js + Webpack compatibility)
+- task: UseNode@1
   inputs:
-    versionSpec: '20.x'
-  displayName: 'Install Node.js'
+    version: '18.x'
+  displayName: 'Use Node 18'
 
+# Restore npm cache for faster builds
+- task: Cache@2
+  inputs:
+    key: 'npm | "$(Agent.OS)" | package-lock.json'
+    restoreKeys: 'npm | "$(Agent.OS)"'
+    path: '$(Pipeline.Workspace)/.npm'
+  displayName: 'Restore npm cache'
+
+# Install dependencies cleanly
 - script: |
-    npm install
+    npm ci
+  displayName: 'Install dependencies'
+
+# Build your Next.js app
+- script: |
     npm run build
-  displayName: 'npm install and build'
+  displayName: 'Build Next.js app'
+
+# Optional: publish build artifacts (if you deploy somewhere)
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: '.next'
+    artifactName: 'next-build'
+  displayName: 'Publish build artifacts'
