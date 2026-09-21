@@ -4,11 +4,19 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  NODE_VERSION: '14'
+
 steps:
 - task: NodeTool@0
   inputs:
-    versionSpec: '14.x'
-  displayName: 'Use Node 14'
+    versionSpec: '$(NODE_VERSION)'
+  displayName: 'Use Node $(NODE_VERSION)'
+
+- script: |
+    node -v
+    npm -v
+  displayName: 'Verify Node version'
 
 - script: |
     npm install
