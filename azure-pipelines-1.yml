@@ -1,8 +1,3 @@
-# Node.js with React
-# Build a Node.js project that uses React.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
-
 trigger:
 - main
 
@@ -10,23 +5,23 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-# Use Node 18 (critical for older Next.js + Webpack compatibility)
-- task: UseNode@1
+# Force Node 18 (this one actually works)
+- task: NodeTool@0
   inputs:
-    version: '18.x'
+    versionSpec: '18.x'
   displayName: 'Use Node 18'
 
-# Install dependencies cleanly
+# Install dependencies
 - script: |
     npm install
   displayName: 'Install dependencies'
 
-# Build your Next.js app
+# Build Next.js app
 - script: |
     npm run build
   displayName: 'Build Next.js app'
 
-# Optional: publish build artifacts (if you deploy somewhere)
+# Optional: publish build artifacts
 - task: PublishBuildArtifacts@1
   inputs:
     pathToPublish: '.next'
